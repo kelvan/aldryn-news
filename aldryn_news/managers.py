@@ -77,13 +77,19 @@ class RelatedManager(TranslationManager):
 
 
 class PublishedManager(RelatedManager):
+    def _filter_queryset(self, qs):
+        qs = qs.filter(publication_start__lte=timezone.now())
+        qs = qs.filter(models.Q(publication_end__isnull=True) | models.Q(publication_end__gte=timezone.now()))
+        return qs
 
     def using_translations(self):
         # not overriding get_queryset, as hvad doesn't use that
         qs = super(PublishedManager, self).using_translations()
-        qs = qs.filter(publication_start__lte=timezone.now())
-        qs = qs.filter(models.Q(publication_end__isnull=True) | models.Q(publication_end__gte=timezone.now()))
-        return qs
+        return self._filter_queryset(qs)
+
+    def get_queryset(self):
+        qs = super(PublishedManager, self).get_queryset()
+        return self._filter_queryset(qs)
 
 
 class TagManager(TranslationManager):
