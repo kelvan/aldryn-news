@@ -4,7 +4,7 @@ from aldryn_news import __version__
 
 REQUIREMENTS = [
     'django-filer',
-    'django-hvad',
+    'django-hvad<1.1',
     'django_select2',
     'django-taggit<0.12',
     'djangocms-text-ckeditor',
