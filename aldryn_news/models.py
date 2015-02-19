@@ -7,7 +7,7 @@ from django.core.exceptions import ImproperlyConfigured
 from django.core.urlresolvers import reverse, NoReverseMatch
 from django.db import models
 from django.utils.translation import ugettext_lazy as _, override
-from django.utils.timezone import now
+from django.utils import timezone
 
 from cms.utils.i18n import get_current_language
 from cms.models.fields import PlaceholderField
@@ -168,6 +168,14 @@ class News(TranslatableModel):
 
     def __unicode__(self):
         return self.lazy_translation_getter('title', str(self.pk))
+
+    def is_published(self):
+        if self.publication_start > timezone.now():
+            return False
+        elif self.publication_end is None:
+            return True
+        else:
+            return self.publication_end >= timezone.now()
 
     def get_absolute_url(self, language=None):
         language = language or get_current_language()
