@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 from django.contrib import admin
-
-from aldryn_news.forms import NewsForm, CategoryForm
-from aldryn_news.models import News, Category, Tag, TaggedItem
+from django.template.response import TemplateResponse
 
 import cms
 from cms.admin.placeholderadmin import PlaceholderAdmin
 from cms.admin.placeholderadmin import FrontendEditableAdmin
 from distutils.version import LooseVersion
 from hvad.admin import TranslatableAdmin
+
+from .forms import NewsForm, CategoryForm
+from .models import News, Category, Tag, TaggedItem
 
 
 class NewsAdmin(FrontendEditableAdmin, TranslatableAdmin, PlaceholderAdmin):
@@ -31,6 +32,14 @@ class NewsAdmin(FrontendEditableAdmin, TranslatableAdmin, PlaceholderAdmin):
                     'fields': ['content']}))
 
         return fieldsets
+
+    def response_add(self, request, obj, post_url_continue=None):
+        return TemplateResponse(request, 'aldryn_news/redirect_template.html',
+                                {'redirect_url': obj.get_absolute_url()})
+
+    def response_change(self, request, obj):
+        return TemplateResponse(request, 'aldryn_news/redirect_template.html',
+                                {'redirect_url': obj.get_absolute_url()})
 
 admin.site.register(News, NewsAdmin)
 

@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, url
 
-from aldryn_news.views import ArchiveView, CategoryListView, NewsDetailView, TaggedListView
-from aldryn_news.feeds import CategoryFeed, LatestEntriesFeed, TagFeed
-from aldryn_news.utils import redirect_to_viewname
+from .views import ArchiveView, CategoryListView, NewsDetailView, TaggedListView
+from .feeds import CategoryFeed, LatestEntriesFeed, TagFeed
+from .utils import redirect_to_viewname
 
 urlpatterns = patterns('',
     url(r'^$', ArchiveView.as_view(), name='latest-news'),

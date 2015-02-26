@@ -12,7 +12,6 @@ from taggit.models import Tag, TaggedItem
 
 
 class CategoryManager(TranslationManager):
-
     def get_with_usage_count(self, language=None, news_ids=None, **kwargs):
         if not news_ids:
             news_ids = self.language(language).values_list('pk', flat=True)
@@ -28,14 +27,20 @@ class CategoryManager(TranslationManager):
 
 
 class RelatedManager(TranslationManager):
-
-    def using_translations(self):
-        # not overriding get_queryset, as hvad doesn't use that
-        qs = super(RelatedManager, self).using_translations()
+    def _select_related(self, qs):
         qs = qs.select_related('key_visual')
         # bug in hvad - Meta ordering isn't preserved
         qs = qs.order_by('-publication_start')
         return qs
+
+    def using_translations(self):
+        # not overriding get_queryset, as hvad doesn't use that
+        qs = super(RelatedManager, self).using_translations()
+        return self._select_related(qs)
+
+    def untranslated(self):
+        qs = super(RelatedManager, self).untranslated()
+        return self._select_related(qs)
 
     def get_tags(self, language, news_ids=None):
         """Returns tags used to tag news and its count. Results are ordered by count."""
@@ -87,12 +92,15 @@ class PublishedManager(RelatedManager):
         qs = super(PublishedManager, self).using_translations()
         return self._filter_queryset(qs)
 
+    def untranslated(self):
+        qs = super(PublishedManager, self).untranslated()
+        return self._filter_queryset(qs)
+
     def get_queryset(self):
         qs = super(PublishedManager, self).get_queryset()
         return self._filter_queryset(qs)
 
 
 class TagManager(TranslationManager):
-
-    def get_query_set(self):
+    def get_queryset(self):
         return self.language()
