@@ -12,7 +12,6 @@ import taggit.managers
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('filer', '0002_auto_20150429_1709'),
         ('cms', '0003_auto_20140926_2347'),
         ('contenttypes', '0001_initial'),
         ('taggit', '0001_initial'),
