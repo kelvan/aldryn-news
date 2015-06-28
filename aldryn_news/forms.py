@@ -13,8 +13,6 @@ from .models import Tag, News
 
 
 class MultipleTagForm(forms.ModelForm):
-    exclude = []
-
     class Meta:
         widgets = {
             'tags': django_select2.Select2MultipleWidget
@@ -35,7 +33,6 @@ class NewsTagWidget(django_select2.widgets.Select2Mixin, taggit.forms.TagWidget)
 
 
 class AutoSlugForm(TranslatableModelForm):
-    exclude = []
     slug_field = 'slug'
     slugified_field = None
 
@@ -100,7 +97,6 @@ class AutoSlugForm(TranslatableModelForm):
 
 
 class CategoryForm(AutoSlugForm):
-    exclude = []
     slugified_field = 'name'
 
     class Meta:
@@ -108,7 +104,6 @@ class CategoryForm(AutoSlugForm):
 
 
 class NewsForm(AutoSlugForm):
-    exclude = []
     slugified_field = 'title'
 
     class Meta:
@@ -118,11 +113,10 @@ class NewsForm(AutoSlugForm):
 
 
 class LinksForm(forms.ModelForm):
-    exclude = []
-
     def __init__(self, *args, **kwargs):
         super(LinksForm, self).__init__(*args, **kwargs)
         self.fields['news'].queryset = News.objects.language()
 
     class Meta:
         model = News
+        exclude = []
