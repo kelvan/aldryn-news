@@ -118,7 +118,7 @@ class NewsForm(AutoSlugForm):
 
 
 class LinksForm(forms.ModelForm):
-    exlude = []
+    exclude = []
 
     def __init__(self, *args, **kwargs):
         super(LinksForm, self).__init__(*args, **kwargs)
