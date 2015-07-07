@@ -67,7 +67,7 @@ class Migration(migrations.Migration):
                 ('publication_start', models.DateTimeField(default=datetime.datetime.now, help_text='Used in the URL. If changed, the URL will change.', verbose_name='Published Since')),
                 ('publication_end', models.DateTimeField(null=True, verbose_name='Published Until', blank=True)),
                 ('category', models.ForeignKey(blank=True, to='aldryn_news.Category', help_text='WARNING! Used in the URL. If changed, the URL will change.', null=True, verbose_name='Category')),
-                ('content', cms.models.fields.PlaceholderField(slotname=b'blog_post_content', editable=False, to='cms.Placeholder', null=True)),
+                ('content', cms.models.fields.PlaceholderField(slotname='blog_post_content', editable=False, to='cms.Placeholder', null=True)),
                 ('key_visual', filer.fields.image.FilerImageField(verbose_name='Key Visual', blank=True, to='filer.Image', null=True)),
             ],
             options={
